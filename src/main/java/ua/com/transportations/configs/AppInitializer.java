@@ -1,6 +1,7 @@
 package ua.com.transportations.configs;
 
 import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -17,10 +18,16 @@ public class AppInitializer implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
-        appContext.register(PropertyConfigurator.class, WebConfigurator.class, BeansConfigurator.class, DBConfigurator.class);
+        appContext.register(PropertyConfigurator.class, BeansConfigurator.class, DBConfigurator.class, SecurityConfigurator.class);
+        appContext.setServletContext(servletContext);
 
-        ServletRegistration.Dynamic dispatcher = servletContext.addServlet(
-                "SpringDispatcher", new DispatcherServlet(appContext));
+        servletContext.addListener(new ContextLoaderListener(appContext));
+
+
+        AnnotationConfigWebApplicationContext dispatcherServlet = new AnnotationConfigWebApplicationContext();
+        dispatcherServlet.register(WebConfigurator.class);
+
+        ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", new DispatcherServlet(dispatcherServlet));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
     }

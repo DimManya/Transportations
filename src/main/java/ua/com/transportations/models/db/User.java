@@ -1,12 +1,17 @@
 package ua.com.transportations.models.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import ua.com.transportations.models.extra.UserRole;
+import ua.com.transportations.models.extra.UserStatus;
+
 /**
  * Created by d.fedorov on 05.06.16.
  */
-public class User extends IdEntity{
+public class User extends IdEntity {
 
     private long id;
-    private String username;
+    private String fName;
+    private String lName;
     private String password;
     private String email;
     private String phone;
@@ -23,15 +28,29 @@ public class User extends IdEntity{
         return this;
     }
 
-    public String getUsername() {
-        return username;
+    public String getfName() {
+        return fName;
     }
 
-    public User setUsername(String username) {
-        this.username = username;
+    public User setfName(String fName) {
+        this.fName = fName;
         return this;
     }
 
+    public String getlName() {
+        return lName;
+    }
+
+    public User setlName(String lName) {
+        this.lName = lName;
+        return this;
+    }
+
+    public String getFullName() {
+        return String.format("%s %s", fName, lName);
+    }
+
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -83,6 +102,9 @@ public class User extends IdEntity{
     }
 
     public User setStatus(int status) {
+        if (status >= UserStatus.values().length) {
+            throw new IllegalArgumentException("User status is out of range for id = " + id);
+        }
         this.status = status;
         return this;
     }
@@ -95,7 +117,6 @@ public class User extends IdEntity{
         User user = (User) o;
 
         if (id != user.id) return false;
-        if (!username.equals(user.username)) return false;
         if (!password.equals(user.password)) return false;
         if (!email.equals(user.email)) return false;
         return phone.equals(user.phone);
@@ -105,7 +126,6 @@ public class User extends IdEntity{
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + username.hashCode();
         result = 31 * result + password.hashCode();
         result = 31 * result + email.hashCode();
         result = 31 * result + phone.hashCode();

@@ -5,6 +5,6 @@ package ua.com.transportations.models.extra;
  */
 public enum UserStatus {
 
-    REGISTERED, ACTIVE
+    REGISTERED, VERIFIED
 
 }

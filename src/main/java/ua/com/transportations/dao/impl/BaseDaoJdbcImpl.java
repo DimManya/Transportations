@@ -24,7 +24,7 @@ public abstract class BaseDaoJdbcImpl<T extends IdEntity> implements BaseDao<T>{
     public T get(long id) {
         NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(getDataSource());
         return template.queryForObject(
-                String.format("SELECT * FROM %s WHERE ID = :id", getTableName()),
+                String.format("SELECT * FROM %s WHERE id = :id", getTableName()),
                 new MapSqlParameterSource("id", id),
                 new BeanPropertyRowMapper<T>(getEntityClass()));
     }
@@ -33,7 +33,7 @@ public abstract class BaseDaoJdbcImpl<T extends IdEntity> implements BaseDao<T>{
     public T save(T entity) {
         SimpleJdbcInsert template = new SimpleJdbcInsert(getDataSource())
                 .withTableName(getTableName())
-                .usingGeneratedKeyColumns("ID");
+                .usingGeneratedKeyColumns("id");
         Number id = template.executeAndReturnKey(new BeanPropertySqlParameterSource(entity));
         entity.setId(id.longValue());
         return entity;

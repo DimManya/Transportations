@@ -37,4 +37,5 @@ public class BeansConfigurator {
         return mailSenderImpl;
     }
 
+
 }
