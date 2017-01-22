@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -14,8 +15,10 @@ import java.util.Properties;
  */
 @Configuration
 @ComponentScan(basePackages = {"ua.com.transportations.services"})
+@Import({PropertyConfigurator.class, DBConfigurator.class, SecurityConfigurator.class})
+
 @EnableScheduling
-public class BeansConfigurator {
+public class AppConfigurator {
 
 
     @Bean
